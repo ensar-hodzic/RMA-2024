@@ -6,10 +6,36 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import java.lang.Exception
 
-class MedicinskiListAdapter(private var biljke: List<Biljka>) : RecyclerView.Adapter<MedicinskiListAdapter.BiljkaViewHolder>() {
+
+
+class MedicinskiListAdapter(private var biljke: List<Biljka>, private val listener: OnItemClickListener) : RecyclerView.Adapter<MedicinskiListAdapter.BiljkaViewHolder>() {
+
+    interface OnItemClickListener {
+        fun onItemClick(position: Int)
+    }
+    inner class BiljkaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+        init {
+            itemView.setOnClickListener(this)
+        }
+        override fun onClick(view: View?) {
+            val position = adapterPosition
+            if (position != RecyclerView.NO_POSITION) {
+                listener.onItemClick(position)
+            }
+        }
+        val slika: ImageView = itemView.findViewById(R.id.slikaItem)
+        val naziv: TextView = itemView.findViewById(R.id.nazivItem)
+        val upozorenje: TextView = itemView.findViewById(R.id.upozorenjeItem)
+        val korist3: TextView = itemView.findViewById(R.id.korist3Item)
+        val korist2: TextView = itemView.findViewById(R.id.korist2Item)
+        val korist1: TextView = itemView.findViewById(R.id.korist1Item)
+        val card: CardView = itemView.findViewById(R.id.card)
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BiljkaViewHolder {
         val view = LayoutInflater
             .from(parent.context)
@@ -38,18 +64,18 @@ class MedicinskiListAdapter(private var biljke: List<Biljka>) : RecyclerView.Ada
         catch (e: Exception){
             holder.korist3.text=""
         }
-
+        val nazivBiljke: String = biljke[position].slika
+        val context: Context = holder.slika.context
+        var id: Int = context.resources
+            .getIdentifier(nazivBiljke, "drawable", context.packageName)
+        if (id==0) id=context.resources
+            .getIdentifier("no_image", "drawable", context.packageName)
+        holder.slika.setImageResource(id)
     }
     fun updateBiljke(biljka: List<Biljka>) {
         this.biljke = biljka
         notifyDataSetChanged()
     }
-    inner class BiljkaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val slika: ImageView = itemView.findViewById(R.id.slikaItem)
-        val naziv: TextView = itemView.findViewById(R.id.nazivItem)
-        val upozorenje: TextView = itemView.findViewById(R.id.upozorenjeItem)
-        val korist3: TextView = itemView.findViewById(R.id.korist3Item)
-        val korist2: TextView = itemView.findViewById(R.id.korist2Item)
-        val korist1: TextView = itemView.findViewById(R.id.korist1Item)
-    }
+
+
 }

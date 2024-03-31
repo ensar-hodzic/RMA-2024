@@ -11,7 +11,8 @@ fun getBiljke(): List<Biljka>{
             profilOkusa = ProfilOkusaBiljke.BEZUKUSNO,
             jela = listOf("Salata od paradajza", "Punjene tikvice"),
             klimatskiTipovi = listOf(KlimatskiTip.SREDOZEMNA, KlimatskiTip.SUBTROPSKA),
-            zemljisniTipovi = listOf(Zemljiste.PJESKOVITO, Zemljiste.ILOVACA)
+            zemljisniTipovi = listOf(Zemljiste.PJESKOVITO, Zemljiste.ILOVACA),
+            slika="bosiljak"
         ),
         Biljka(
             naziv = "Nana (Mentha spicata)",
@@ -22,7 +23,8 @@ fun getBiljke(): List<Biljka>{
             profilOkusa = ProfilOkusaBiljke.MENTA,
             jela = listOf("Jogurt sa voćem", "Gulaš"),
             klimatskiTipovi = listOf(KlimatskiTip.SREDOZEMNA, KlimatskiTip.UMJERENA),
-            zemljisniTipovi = listOf(Zemljiste.GLINENO, Zemljiste.CRNICA)
+            zemljisniTipovi = listOf(Zemljiste.GLINENO, Zemljiste.CRNICA),
+            slika = "nana"
         ),
         Biljka(
             naziv = "Kamilica (Matricaria chamomilla)",
@@ -33,7 +35,8 @@ fun getBiljke(): List<Biljka>{
             profilOkusa = ProfilOkusaBiljke.AROMATICNO,
             jela = listOf("Čaj od kamilice"),
             klimatskiTipovi = listOf(KlimatskiTip.UMJERENA, KlimatskiTip.SUBTROPSKA),
-            zemljisniTipovi = listOf(Zemljiste.PJESKOVITO, Zemljiste.KRECNJACKO)
+            zemljisniTipovi = listOf(Zemljiste.PJESKOVITO, Zemljiste.KRECNJACKO),
+            slika="kamilica"
         ),
         Biljka(
             naziv = "Ružmarin (Rosmarinus officinalis)",
@@ -44,7 +47,8 @@ fun getBiljke(): List<Biljka>{
             profilOkusa = ProfilOkusaBiljke.AROMATICNO,
             jela = listOf("Pečeno pile", "Grah","Gulaš"),
             klimatskiTipovi = listOf(KlimatskiTip.SREDOZEMNA, KlimatskiTip.SUHA),
-            zemljisniTipovi = listOf(Zemljiste.SLJUNOVITO, Zemljiste.KRECNJACKO)
+            zemljisniTipovi = listOf(Zemljiste.SLJUNOVITO, Zemljiste.KRECNJACKO),
+            slika="ruzmarin"
         ),
         Biljka(
             naziv = "Lavanda (Lavandula angustifolia)",
@@ -55,7 +59,63 @@ fun getBiljke(): List<Biljka>{
             profilOkusa = ProfilOkusaBiljke.AROMATICNO,
             jela = listOf("Jogurt sa voćem"),
             klimatskiTipovi = listOf(KlimatskiTip.SREDOZEMNA, KlimatskiTip.SUHA),
-            zemljisniTipovi = listOf(Zemljiste.PJESKOVITO, Zemljiste.KRECNJACKO)
+            zemljisniTipovi = listOf(Zemljiste.PJESKOVITO, Zemljiste.KRECNJACKO),
+            slika="lavanda"
+        ),
+        Biljka(
+            naziv="Kadulja (Salvia officinalis)",
+            porodica="Lamiaceae (usnate)",
+            medicinskoUpozorenje="Nije preporučljivo u trudnoći i dojenju. Može iritati osjetljivu kožu.",
+            medicinskeKoristi=listOf(MedicinskaKorist.SMIRENJE, MedicinskaKorist.PROTUUPALNO),
+            profilOkusa=ProfilOkusaBiljke.AROMATICNO,
+            jela=listOf("Juhe", "Salate", "Umaci"),
+            klimatskiTipovi=listOf(KlimatskiTip.SREDOZEMNA, KlimatskiTip.SUBTROPSKA, KlimatskiTip.UMJERENA),
+            zemljisniTipovi=listOf(Zemljiste.PJESKOVITO, Zemljiste.GLINENO, Zemljiste.ILOVACA),
+            slika = "kadulja"
+        ),
+        Biljka(
+            naziv="Majčina dušica (Thymus vulgaris)",
+            porodica="Lamiaceae (usnate)",
+            medicinskoUpozorenje="Nije preporučljivo u trudnoći i dojenju.",
+            medicinskeKoristi=listOf(MedicinskaKorist.PROTUUPALNO, MedicinskaKorist.PODRSKAIMUNITETU),
+            profilOkusa=ProfilOkusaBiljke.SLATKI,
+            jela=listOf("Pečenje", "Juhe", "Čajevi"),
+            klimatskiTipovi=listOf(KlimatskiTip.SREDOZEMNA, KlimatskiTip.SUBTROPSKA, KlimatskiTip.UMJERENA),
+            zemljisniTipovi=listOf(Zemljiste.PJESKOVITO, Zemljiste.KRECNJACKO, Zemljiste.ILOVACA),
+            slika="majcina_dusica"
+        ),
+        Biljka(
+            naziv="Origano (Origanum vulgare)",
+            porodica="Lamiaceae (usnate)",
+            medicinskoUpozorenje="Nije preporučljivo u trudnoći i dojenju.",
+            medicinskeKoristi=listOf(MedicinskaKorist.PROTUUPALNO, MedicinskaKorist.REGULACIJAPROBAVE),
+            profilOkusa=ProfilOkusaBiljke.GORKO,
+            jela=listOf("Pica", "Tjestenina", "Salate"),
+            klimatskiTipovi=listOf(KlimatskiTip.SREDOZEMNA, KlimatskiTip.SUBTROPSKA, KlimatskiTip.UMJERENA),
+            zemljisniTipovi=listOf(Zemljiste.PJESKOVITO, Zemljiste.KRECNJACKO, Zemljiste.ILOVACA),
+            slika="origano"
+        ),
+        Biljka(
+            naziv="Rukola (Diplotaxis tenuifolia)",
+            porodica="Brassicaceae (krstašice)",
+            medicinskoUpozorenje="Nije preporučljivo u trudnoći i dojenju.",
+            medicinskeKoristi=listOf(MedicinskaKorist.REGULACIJAPRITISKA, MedicinskaKorist.PROTUUPALNO, MedicinskaKorist.REGULACIJAPROBAVE),
+            profilOkusa=ProfilOkusaBiljke.LJUTO,
+            jela=listOf("Salate", "Sendviči", "Tjestenina"),
+            klimatskiTipovi=listOf(KlimatskiTip.SREDOZEMNA, KlimatskiTip.SUBTROPSKA, KlimatskiTip.UMJERENA),
+            zemljisniTipovi=listOf(Zemljiste.PJESKOVITO, Zemljiste.GLINENO, Zemljiste.ILOVACA),
+            slika="rukola"
+        ),
+        Biljka(
+            naziv="Vlasac (Allium schoenoprasum L.)",
+            porodica="Amaryllidaceae (amarilise)",
+            medicinskoUpozorenje="Nema poznatih nuspojava uz umjerenu upotrebu. Visoka doza može izazvati probleme s probavom.",
+            medicinskeKoristi=listOf(MedicinskaKorist.PODRSKAIMUNITETU, MedicinskaKorist.PROTUUPALNO),
+            profilOkusa=ProfilOkusaBiljke.KORIJENASTO,
+            jela=listOf("Salate", "Umaci", "Sirevi"),
+            klimatskiTipovi=listOf(KlimatskiTip.SREDOZEMNA, KlimatskiTip.SUBTROPSKA, KlimatskiTip.UMJERENA),
+            zemljisniTipovi=listOf(Zemljiste.PJESKOVITO, Zemljiste.GLINENO, Zemljiste.ILOVACA),
+            slika="vlasac"
         )
     )
 }

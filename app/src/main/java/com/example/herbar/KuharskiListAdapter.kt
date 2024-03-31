@@ -6,10 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import java.lang.Exception
 
-class KuharskiListAdapter(private var biljke: List<Biljka>) : RecyclerView.Adapter<KuharskiListAdapter.BiljkaViewHolder>() {
+class KuharskiListAdapter(private var biljke: List<Biljka>, private val listener: OnItemClickListener) : RecyclerView.Adapter<KuharskiListAdapter.BiljkaViewHolder>()  {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BiljkaViewHolder {
         val view = LayoutInflater
             .from(parent.context)
@@ -38,14 +40,37 @@ class KuharskiListAdapter(private var biljke: List<Biljka>) : RecyclerView.Adapt
         catch (e: Exception){
             holder.korist3.text=""
         }
+        val nazivBiljke: String = biljke[position].slika
+        val context: Context = holder.slika.context
+        var id: Int = context.resources
+            .getIdentifier(nazivBiljke, "drawable", context.packageName)
+        if (id==0) id=context.resources
+            .getIdentifier("no_image", "drawable", context.packageName)
+        holder.slika.setImageResource(id)
 
     }
     fun updateBiljke(biljka: List<Biljka>) {
         this.biljke = biljka
         notifyDataSetChanged()
     }
-    inner class BiljkaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+
+
+    interface OnItemClickListener {
+        fun onItemClick(position: Int)
+    }
+    inner class BiljkaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+        init {
+            itemView.setOnClickListener(this)
+        }
+        override fun onClick(view: View?) {
+            val position = adapterPosition
+            if (position != RecyclerView.NO_POSITION) {
+                listener.onItemClick(position)
+            }
+        }
         val slika: ImageView = itemView.findViewById(R.id.slikaItem)
+        val card: CardView = itemView.findViewById(R.id.card)
         val naziv: TextView = itemView.findViewById(R.id.nazivItem)
         val profilOkusa: TextView = itemView.findViewById(R.id.profilOkusaItem)
         val korist3: TextView = itemView.findViewById(R.id.jelo3Item)
