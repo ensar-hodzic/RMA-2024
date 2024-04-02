@@ -66,29 +66,18 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener, Me
             0 ->{
                 currentMod=0
                 biljkeRV.adapter = medicinskiListAdapter
-                if(itemClicked){
-                    customList(currentBiljka)
-                    medicinskiListAdapter.updateBiljke(biljkeList)
-                }
-                else medicinskiListAdapter.updateBiljke(getBiljke())
+                medicinskiListAdapter.updateBiljke(biljkeList)
             }
             1 -> {
                 currentMod=1
                 biljkeRV.adapter = kuharskiListAdapter
-                if(itemClicked){
-                    customList(currentBiljka)
-                    kuharskiListAdapter.updateBiljke(biljkeList)
-                }
-                else kuharskiListAdapter.updateBiljke(getBiljke())
+                kuharskiListAdapter.updateBiljke(biljkeList)
             }
             2 -> {
                 currentMod=2
                 biljkeRV.adapter=botanickiListAdapter
-                if(itemClicked){
-                    customList(currentBiljka)
-                    botanickiListAdapter.updateBiljke(biljkeList)
-                }
-                else botanickiListAdapter.updateBiljke(getBiljke())            }
+                botanickiListAdapter.updateBiljke(biljkeList)
+            }
         }
     }
     override fun onItemClick(position: Int) {
