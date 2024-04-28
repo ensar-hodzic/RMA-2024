@@ -1,5 +1,7 @@
 package com.example.herbar
 
+import android.graphics.Bitmap
+
 data class Biljka (
     var naziv : String,
     val porodica : String,

@@ -1,11 +1,13 @@
 package com.example.herbar
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,6 +25,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener, Me
     private lateinit var currentBiljka: Biljka
     private var itemClicked=false
     private lateinit var resetButton: Button
+    private lateinit var novaBiljkaButton: Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -56,6 +59,20 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener, Me
                 2->botanickiListAdapter.updateBiljke(biljkeList)
             }
         }
+        novaBiljkaButton = findViewById(R.id.novaBiljkaBtn)
+        novaBiljkaButton.setOnClickListener{
+            val intent = Intent(this, NovaBiljkaActivity::class.java)
+            startActivity(intent)
+        }
+
+    }
+
+    override fun onResume() {
+        biljkeList=getBiljke()
+        currentMod=0
+        biljkeRV.adapter = medicinskiListAdapter
+        medicinskiListAdapter.updateBiljke(biljkeList)
+        super.onResume()
     }
     override fun onNothingSelected(parent: AdapterView<*>?) {
 

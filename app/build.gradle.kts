@@ -36,7 +36,19 @@ android {
 }
 
 dependencies {
+    implementation("androidx.camera:camera-camera2:1.1.0-alpha12")
+    implementation("androidx.camera:camera-lifecycle:1.1.0-alpha12")
+    implementation("androidx.camera:camera-view:1.0.0-alpha30")
     androidTestImplementation("androidx.test.espresso:espresso-contrib:3.5.1")
+    debugImplementation("androidx.tracing:tracing:+")
+    testImplementation("junit:junit:+")
+    androidTestImplementation("androidx.test.ext:junit:+")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
+    androidTestImplementation("androidx.test:core-ktx:+")
+    androidTestImplementation("androidx.test.ext:junit-ktx:+")
+    testImplementation("org.hamcrest:hamcrest:x.y")
+    testImplementation("org.hamcrest:hamcrest:2.2")
+    androidTestImplementation("androidx.test.espresso:espresso-intents:3.4.0")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
