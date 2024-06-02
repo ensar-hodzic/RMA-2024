@@ -39,6 +39,7 @@ dependencies {
     implementation("androidx.camera:camera-camera2:1.1.0-alpha12")
     implementation("androidx.camera:camera-lifecycle:1.1.0-alpha12")
     implementation("androidx.camera:camera-view:1.0.0-alpha30")
+    implementation(libs.androidx.room.common)
     androidTestImplementation("androidx.test.espresso:espresso-contrib:3.5.1")
     debugImplementation("androidx.tracing:tracing:+")
     testImplementation("junit:junit:+")
@@ -57,4 +58,9 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:+")
+    implementation("com.github.bumptech.glide:glide:+")
+    annotationProcessor("com.github.bumptech.glide:compiler:+")
+    implementation("com.squareup.retrofit2:retrofit:+")
+    implementation("com.squareup.retrofit2:converter-gson:+")
 }

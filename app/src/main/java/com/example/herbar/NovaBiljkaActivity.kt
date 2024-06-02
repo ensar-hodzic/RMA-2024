@@ -24,8 +24,13 @@ import androidx.core.content.ContextCompat
 import androidx.core.text.set
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.launch
 
-class NovaBiljkaActivity : AppCompatActivity() {
+class NovaBiljkaActivity() : AppCompatActivity() {
     lateinit var medicinskaKoristLV: ListView
     lateinit var zemljisniTipLV: ListView
     lateinit var klimatskiTipLV: ListView
@@ -177,20 +182,24 @@ class NovaBiljkaActivity : AppCompatActivity() {
         dodajBtn = findViewById(R.id.dodajBiljkuBtn)
         dodajBtn.setOnClickListener {
             if(validation()) {
-                addBiljka(
-                    Biljka(
-                        nazivET.text.toString(),
-                        porodicaET.text.toString(),
-                        upozorenjeET.text.toString(),
-                        selectedMedicinskeKoristi,
-                        selectedProfilOkusaBiljke[0],
-                        jelaList,
-                        selectedKlimatskiTip,
-                        selectedZemljisniTip,
-                        "ic_launcher_background"
-                    )
+                var trenBiljka=Biljka(
+                    nazivET.text.toString(),
+                    porodicaET.text.toString(),
+                    upozorenjeET.text.toString(),
+                    selectedMedicinskeKoristi,
+                    selectedProfilOkusaBiljke[0],
+                    jelaList,
+                    selectedKlimatskiTip,
+                    selectedZemljisniTip,
+                    "ic_launcher_background"
                 )
-                finish()
+                CoroutineScope(Dispatchers.Main).launch {
+                    trenBiljka = TrefleDAOProvider.dao.fixData(trenBiljka)
+                    addBiljka(trenBiljka)
+                    Toast.makeText(this@NovaBiljkaActivity,"Popravljanje podataka", Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+
             }
         }
 
@@ -226,8 +235,12 @@ class NovaBiljkaActivity : AppCompatActivity() {
 
     private fun validation():Boolean {
         var dobar=true
-        if (nazivET.text.toString().length < 3 || nazivET.text.toString().length > 20) {
-            nazivET.setError("Dužina teksta mora biti veća od 2 karaktera i kraća od 20 karaktera")
+        if (nazivET.text.toString().length < 3 || nazivET.text.toString().length > 40) {
+            nazivET.setError("Dužina teksta mora biti veća od 2 karaktera i kraća od 40 karaktera")
+            dobar=false
+        }
+        if(extractStringInsideParentheses(nazivET.text.toString())==null){
+            nazivET.setError("Unesite latinski naziv u zagradi")
             dobar=false
         }
         if (porodicaET.text.toString().length < 3 || porodicaET.text.toString().length > 20) {

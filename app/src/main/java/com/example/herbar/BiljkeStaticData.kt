@@ -1,6 +1,9 @@
 package com.example.herbar
 
 import android.widget.Toast
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 private var biljke=listOf(
     Biljka(

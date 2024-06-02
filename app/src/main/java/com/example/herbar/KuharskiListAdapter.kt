@@ -8,6 +8,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.lang.Exception
 
 class KuharskiListAdapter(private var biljke: List<Biljka>, private val listener: OnItemClickListener) : RecyclerView.Adapter<KuharskiListAdapter.BiljkaViewHolder>()  {
@@ -42,11 +45,10 @@ class KuharskiListAdapter(private var biljke: List<Biljka>, private val listener
         }
         val nazivBiljke: String = biljke[position].slika
         val context: Context = holder.slika.context
-        var id: Int = context.resources
-            .getIdentifier(nazivBiljke, "drawable", context.packageName)
-        if (id==0) id=context.resources
-            .getIdentifier("no_image", "drawable", context.packageName)
-        holder.slika.setImageResource(id)
+        CoroutineScope(Dispatchers.Main).launch {
+            val bitmap = TrefleDAOProvider.dao.getImage(biljke[position])
+            holder.slika.setImageBitmap(bitmap)
+        }
 
     }
     fun updateBiljke(biljka: List<Biljka>) {

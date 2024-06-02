@@ -1,20 +1,17 @@
 package com.example.herbar
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView.OnItemClickListener
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class BotanickiListAdapter(private var biljke: List<Biljka>, private val listener: BotanickiListAdapter.OnItemClickListener) : RecyclerView.Adapter<BotanickiListAdapter.BiljkaViewHolder>() {
+class PretragaListAdapter(private var biljke: List<Biljka>) : RecyclerView.Adapter<PretragaListAdapter.BiljkaViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BiljkaViewHolder {
         val view = LayoutInflater
@@ -50,16 +47,8 @@ class BotanickiListAdapter(private var biljke: List<Biljka>, private val listene
     interface OnItemClickListener {
         fun onItemClick(position: Int)
     }
-    inner class BiljkaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
-        init {
-            itemView.setOnClickListener(this)
-        }
-        override fun onClick(view: View?) {
-            val position = adapterPosition
-            if (position != RecyclerView.NO_POSITION) {
-                listener.onItemClick(position)
-            }
-        }
+    inner class BiljkaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
         val slika: ImageView = itemView.findViewById(R.id.slikaItem)
         val card: CardView = itemView.findViewById(R.id.card)
         val naziv: TextView = itemView.findViewById(R.id.nazivItem)
