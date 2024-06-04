@@ -18,6 +18,9 @@
           <timeTargetWasSelectedWithDropDown value="2024-05-16T09:20:53.814734500Z" />
         </State>
       </entry>
+      <entry key="TestS3">
+        <State />
+      </entry>
       <entry key="app">
         <State>
           <targetSelectedWithDropDown>
@@ -34,16 +37,10 @@
           <timeTargetWasSelectedWithDropDown value="2024-05-25T10:35:40.058390400Z" />
         </State>
       </entry>
-      <entry key="testSlike()">
+      <entry key="fixBosiljakTest()">
         <State />
       </entry>
       <entry key="testValidacijaKlimatskogTipa()">
-        <State />
-      </entry>
-      <entry key="testValidacijaMedicinskihKoristi()">
-        <State />
-      </entry>
-      <entry key="testValidacijeJela()">
         <State />
       </entry>
     </value>

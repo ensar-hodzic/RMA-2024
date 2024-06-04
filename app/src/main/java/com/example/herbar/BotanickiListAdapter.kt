@@ -39,7 +39,7 @@ class BotanickiListAdapter(private var biljke: List<Biljka>, private val listene
             holder.klima.text=""
         }
         CoroutineScope(Dispatchers.Main).launch {
-            val bitmap = TrefleDAOProvider.dao.getImage(biljke[position])
+            val bitmap = TrefleDAO().getImage(biljke[position])
             holder.slika.setImageBitmap(bitmap)
         }
     }

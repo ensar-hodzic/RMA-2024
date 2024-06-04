@@ -194,7 +194,7 @@ class NovaBiljkaActivity() : AppCompatActivity() {
                     "ic_launcher_background"
                 )
                 CoroutineScope(Dispatchers.Main).launch {
-                    trenBiljka = TrefleDAOProvider.dao.fixData(trenBiljka)
+                    trenBiljka = TrefleDAO().fixData(trenBiljka)
                     addBiljka(trenBiljka)
                     Toast.makeText(this@NovaBiljkaActivity,"Popravljanje podataka", Toast.LENGTH_SHORT).show()
                     finish()

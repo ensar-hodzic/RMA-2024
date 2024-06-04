@@ -1,20 +1,16 @@
 package com.example.herbar
 
-import android.content.res.Resources
 import android.graphics.BitmapFactory
-import android.graphics.drawable.Drawable
-import androidx.room.Dao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
+import android.os.NetworkOnMainThreadException
 import android.util.Log
-import android.widget.Toast
 import org.json.JSONException
 import java.io.IOException
 import java.net.MalformedURLException
 import java.net.URL
+
 
 fun extractStringInsideParentheses(input: String): String? {
     val regex = "\\(([^)]+)\\)".toRegex()
@@ -33,10 +29,16 @@ fun tipZemljista(soil: Double): Zemljiste?{
 }
 
 
-class TrefleDAO(private val defaultBitmap: Bitmap) {
+class TrefleDAO {
     private val api_key= "YL7dChyJ6LGtljfkA5eagwTiIb20th_UIDsmFx0NqdM"
+
+
     suspend fun getImage(biljka: Biljka): Bitmap {
         return withContext(Dispatchers.IO){
+            val bit_url=URL("https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png").openStream()
+            val defaultBitmap: Bitmap? = BitmapFactory.decodeStream(
+                bit_url
+            )
             try {
                 var response = extractStringInsideParentheses(biljka.naziv)?.let {
                     ApiAdapter.retrofit.getSearchResult(api_key,
@@ -46,24 +48,29 @@ class TrefleDAO(private val defaultBitmap: Bitmap) {
                 val imageUrl = response?.body()?.data?.firstOrNull()?.slika
                 if (imageUrl != null) {
                     val url = URL(imageUrl)
-                    val bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream())
-                    return@withContext bitmap
+                    return@withContext BitmapFactory.decodeStream(
+                        url.openConnection().getInputStream()
+                    )
                 } else {
-                    return@withContext defaultBitmap
+                    return@withContext defaultBitmap!!
                 }
             } catch (e: ExceptionInInitializerError) {
-                Log.d("Belaj", "Onaj exceptionInInitializer")
-                return@withContext defaultBitmap
+                //Log.d("Belaj", "Onaj exceptionInInitializer")
+                return@withContext defaultBitmap!!
             }
             catch (e: MalformedURLException) {
-                Log.d("Belaj", "URL loš")
-                return@withContext defaultBitmap
+                //Log.d("Belaj", "URL loš")
+                return@withContext defaultBitmap!!
+            }
+            catch (e: NetworkOnMainThreadException) {
+                //Log.d("Belaj", "Šta je ovo")
+                return@withContext defaultBitmap!!
             } catch (e: IOException) {
-                Log.d("Belaj", "IOExc")
-                return@withContext defaultBitmap
+                //Log.d("Belaj", "IOExc")
+                return@withContext defaultBitmap!!
             } catch (e: JSONException) {
-                Log.d("Belaj", "JSONExc")
-                return@withContext defaultBitmap
+                //Log.d("Belaj", "JSONExc")
+                return@withContext defaultBitmap!!
             }
         }
     }
@@ -128,17 +135,17 @@ class TrefleDAO(private val defaultBitmap: Bitmap) {
 
                 return@withContext novaBiljka
             } catch (e: ExceptionInInitializerError) {
-                Log.d("Belaj", "Onaj exceptionInInitializer")
+                //Log.d("Belaj", "Onaj exceptionInInitializer")
                 return@withContext biljka
             }
             catch (e: MalformedURLException) {
-                Log.d("Belaj", "URL loš")
+                //Log.d("Belaj", "URL loš")
                 return@withContext biljka
             } catch (e: IOException) {
-                Log.d("Belaj", "IOExc")
+                ////Log.d("Belaj", "IOExc")
                 return@withContext biljka
             } catch (e: JSONException) {
-                Log.d("Belaj", "JSONExc")
+                ////Log.d("Belaj", "JSONExc")
                 return@withContext biljka
             }
         }
@@ -148,52 +155,50 @@ class TrefleDAO(private val defaultBitmap: Bitmap) {
         return withContext(Dispatchers.IO){
             try {
                 var search_result = mutableListOf<TrefleBiljka>()
-                var response = ApiAdapter.retrofit.getFlowerColor(flower_color,api_key)
+                var response = ApiAdapter.retrofit.getFlowerColor(substr,flower_color,api_key)
                 if(response.body()!=null) search_result+= response.body()!!.data
-                while(response.body()?.links != null && response.body()?.links?.next !=null){
+                /*while(response.body()?.links != null && response.body()?.links?.next !=null){
                     var next = response.body()?.links?.next
                     if (next != null) {
-                        if(next.substringAfter("page=").toInt()>10) break
-                        response= ApiAdapter.retrofit.getPage(flower_color,next.substringAfter("page=").toInt(),api_key)
+                        if(next.substringAfter("page=",).toInt()>10) break
+                        response= ApiAdapter.retrofit.getPage(substr,flower_color,next.substringAfter("page=").toInt(),api_key)
                     }
                     if(response.body()!=null) search_result+= response.body()!!.data
-                }
+                }*/
                 var rez_biljaka = mutableListOf<Biljka>()
                 search_result.forEach {
                     if(it.naziv!=null && it.latin!=null) {
                         val name = it.naziv + " (" + it.latin + ")"
-                        if (name.contains(substr, ignoreCase = true)) {
-                            var temp = Biljka(
-                                name,
-                                it.porodica,
-                                "",
-                                listOf(),
-                                ProfilOkusaBiljke.KORIJENASTO,
-                                listOf(),
-                                listOf(),
-                                listOf(),
-                                ""
-                            )
-                            rez_biljaka.add(
-                                fixData(temp)
-                            )
-                        }
+                        var temp = Biljka(
+                            name,
+                            it.porodica,
+                            "",
+                            listOf(),
+                            ProfilOkusaBiljke.KORIJENASTO,
+                            listOf(),
+                            listOf(),
+                            listOf(),
+                            ""
+                        )
+                        rez_biljaka.add(
+                            fixData(temp)
+                        )
                     }
                 }
-                Log.d("ima ih", rez_biljaka.size.toString())
+                //Log.d("ima ih", rez_biljaka.size.toString())
                 return@withContext rez_biljaka
             } catch (e: ExceptionInInitializerError) {
-                Log.d("Belaj", "Onaj exceptionInInitializer")
+                //Log.d("Belaj", "Onaj exceptionInInitializer")
                 return@withContext listOf()
             }
             catch (e: MalformedURLException) {
-                Log.d("Belaj", "URL loš")
+                //Log.d("Belaj", "URL loš")
                 return@withContext listOf()
             } catch (e: IOException) {
-                Log.d("Belaj", "IOExc")
+                //Log.d("Belaj", "IOExc")
                 return@withContext listOf()
             } catch (e: JSONException) {
-                Log.d("Belaj", "JSONExc")
+                //Log.d("Belaj", "JSONExc")
                 return@withContext listOf()
             }
         }

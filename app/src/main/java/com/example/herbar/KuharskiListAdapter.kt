@@ -46,7 +46,7 @@ class KuharskiListAdapter(private var biljke: List<Biljka>, private val listener
         val nazivBiljke: String = biljke[position].slika
         val context: Context = holder.slika.context
         CoroutineScope(Dispatchers.Main).launch {
-            val bitmap = TrefleDAOProvider.dao.getImage(biljke[position])
+            val bitmap = TrefleDAO().getImage(biljke[position])
             holder.slika.setImageBitmap(bitmap)
         }
 

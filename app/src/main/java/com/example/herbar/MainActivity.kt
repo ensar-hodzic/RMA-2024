@@ -20,11 +20,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
-object TrefleDAOProvider {
-    lateinit var dao: TrefleDAO
-}
-
-
 class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener, MedicinskiListAdapter.OnItemClickListener,KuharskiListAdapter.OnItemClickListener,BotanickiListAdapter.OnItemClickListener{
 
     private lateinit var biljkeRV: RecyclerView
@@ -50,8 +45,6 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener, Me
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        var defaultBitmap = BitmapFactory.decodeResource(resources, R.drawable.no_image)
-        TrefleDAOProvider.dao= TrefleDAO(defaultBitmap)
         bottomBar=findViewById(R.id.bottomBar)
 
         biljkeRV = findViewById(R.id.biljkeRV)
@@ -90,7 +83,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener, Me
                 Toast.makeText(this, "Pretraga počela", Toast.LENGTH_SHORT).show()
                 var list: MutableList<Biljka>
                 CoroutineScope(Dispatchers.Main).launch {
-                    list= TrefleDAOProvider.dao.getPlantswithFlowerColor(bojeSpinner.selectedItem.toString(),pretragaET.text.toString()).toMutableList()
+                    list= TrefleDAO().getPlantswithFlowerColor(bojeSpinner.selectedItem.toString(),pretragaET.text.toString()).toMutableList()
                     pretragaListAdapter.updateBiljke(list)
                     Toast.makeText(this@MainActivity, list.size.toString()+" rezultata", Toast.LENGTH_SHORT).show()
                     biljkeRV.adapter=pretragaListAdapter

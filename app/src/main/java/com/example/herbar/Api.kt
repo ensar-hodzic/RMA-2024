@@ -18,12 +18,12 @@ interface Api {
     suspend fun getBiljka(@Path("plant") plant:String, @Query("token") apiKey: String
     ): Response<BiljkaResult>
 
-    @GET("api/v1/plants")
-    suspend fun getFlowerColor(@Query("filter[flower_color]") color:String, @Query("token") apiKey: String
+    @GET("api/v1/plants/search")
+    suspend fun getFlowerColor(@Query("q") query: String, @Query("filter[flower_color]") color:String, @Query("token") apiKey: String
     ): Response<SearchResult>
 
     @GET("api/v1/plants")
-    suspend fun getPage(@Query("filter[flower_color]") color:String, @Query("page") page:Int, @Query("token") apiKey:String): Response<SearchResult>
+    suspend fun getPage(@Query("q") query: String,@Query("filter[flower_color]") color:String, @Query("page") page:Int, @Query("token") apiKey:String): Response<SearchResult>
 }
 
 data class SearchResult(

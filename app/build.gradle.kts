@@ -63,4 +63,6 @@ dependencies {
     annotationProcessor("com.github.bumptech.glide:compiler:+")
     implementation("com.squareup.retrofit2:retrofit:+")
     implementation("com.squareup.retrofit2:converter-gson:+")
+    testImplementation ("org.assertj:assertj-core:3.22.0")
+    implementation ("org.assertj:assertj-core:3.22.0")
 }
