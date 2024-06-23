@@ -40,18 +40,21 @@ class TrefleDAO {
                 bit_url
             )
             try {
+                //extractStringInsideParentheses(biljka.naziv)?.let { Log.d("Belaj", it) }
                 var response = extractStringInsideParentheses(biljka.naziv)?.let {
                     ApiAdapter.retrofit.getSearchResult(api_key,
                         it
                     )
                 }
                 val imageUrl = response?.body()?.data?.firstOrNull()?.slika
+                //Log.d("Belaj",imageUrl+"")
                 if (imageUrl != null) {
                     val url = URL(imageUrl)
                     return@withContext BitmapFactory.decodeStream(
                         url.openConnection().getInputStream()
                     )
                 } else {
+                    //Log.d("Belaj","sto null")
                     return@withContext defaultBitmap!!
                 }
             } catch (e: ExceptionInInitializerError) {

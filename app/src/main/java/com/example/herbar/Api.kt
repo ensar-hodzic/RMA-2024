@@ -75,7 +75,7 @@ data class BiljkaResult(
 
 object ApiAdapter {
     val retrofit : Api = Retrofit.Builder()
-        .baseUrl("https://trefle.io/")
+        .baseUrl("http://trefle.io/")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
         .create(Api::class.java)

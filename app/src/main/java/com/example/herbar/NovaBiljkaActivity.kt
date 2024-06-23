@@ -1,16 +1,11 @@
 package com.example.herbar
 
-import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.Camera
-import android.graphics.drawable.BitmapDrawable
-import android.media.Image
 import android.os.Bundle
 import android.provider.MediaStore
-import android.view.View
-import android.widget.AdapterView
+import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
@@ -21,14 +16,15 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.text.set
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class NovaBiljkaActivity() : AppCompatActivity() {
     lateinit var medicinskaKoristLV: ListView
@@ -191,14 +187,34 @@ class NovaBiljkaActivity() : AppCompatActivity() {
                     jelaList,
                     selectedKlimatskiTip,
                     selectedZemljisniTip,
-                    "ic_launcher_background"
+                    ""
                 )
-                CoroutineScope(Dispatchers.Main).launch {
-                    trenBiljka = TrefleDAO().fixData(trenBiljka)
-                    addBiljka(trenBiljka)
-                    Toast.makeText(this@NovaBiljkaActivity,"Popravljanje podataka", Toast.LENGTH_SHORT).show()
-                    finish()
+                /*CoroutineScope(Dispatchers.IO).launch {
+                    trenBiljka= TrefleDAO().fixData(trenBiljka)
+                    awaitAll()
                 }
+                */var db = BiljkaDatabase.getInstance(this)
+                /*lifecycleScope.launch(Dispatchers.IO) {
+                    db.biljkaDAO().saveBiljka(trenBiljka)
+                    runOnUiThread {
+                        finish()
+                    }
+                }*/
+                lifecycleScope.launch(Dispatchers.IO) {
+                    try {
+                        trenBiljka = withContext(Dispatchers.IO) {
+                            TrefleDAO().fixData(trenBiljka)
+                        }
+                        db.biljkaDao().saveBiljka(trenBiljka)
+                        withContext(Dispatchers.Main) {
+                            finish()
+                        }
+                    } catch (e: Exception) {
+                        Log.d("Belaj", "ja belaja")
+
+                    }
+                }
+
 
             }
         }

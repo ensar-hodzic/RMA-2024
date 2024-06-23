@@ -38,9 +38,24 @@ class BotanickiListAdapter(private var biljke: List<Biljka>, private val listene
         catch (e: Exception){
             holder.klima.text=""
         }
+        val context = holder.slika.context
+        var db = BiljkaDatabase.getInstance(context)
         CoroutineScope(Dispatchers.Main).launch {
-            val bitmap = TrefleDAO().getImage(biljke[position])
-            holder.slika.setImageBitmap(bitmap)
+            var slika: BiljkaBitmap?
+            CoroutineScope(Dispatchers.IO).launch {
+                slika = db.biljkaDao().getBiljkaBitmap(biljke[position].id)
+                if (slika != null) {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        holder.slika.setImageBitmap(slika!!.bitmap)
+                    }
+                } else {
+                    val newSlika = TrefleDAO().getImage(biljke[position])
+                    val success = db.biljkaDao().addImage(biljke[position].id, newSlika)
+                    CoroutineScope(Dispatchers.Main).launch {
+                        holder.slika.setImageBitmap(newSlika)
+                    }
+                }
+            }
         }
     }
     fun updateBiljke(biljka: List<Biljka>) {

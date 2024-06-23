@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -69,10 +70,25 @@ class MedicinskiListAdapter(private var biljke: List<Biljka>, private val listen
         }
         val nazivBiljke: String = biljke[position].slika
         val context: Context = holder.slika.context
+        var db = BiljkaDatabase.getInstance(context)
         CoroutineScope(Dispatchers.Main).launch {
-            val bitmap = TrefleDAO().getImage(biljke[position])
-            holder.slika.setImageBitmap(bitmap)
+            var slika: BiljkaBitmap?
+            CoroutineScope(Dispatchers.IO).launch {
+                slika = db.biljkaDao().getBiljkaBitmap(biljke[position].id)
+                if (slika != null) {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        holder.slika.setImageBitmap(slika!!.bitmap)
+                    }
+                } else {
+                    val newSlika = TrefleDAO().getImage(biljke[position])
+                    val success = db.biljkaDao().addImage(biljke[position].id, newSlika)
+                    CoroutineScope(Dispatchers.Main).launch {
+                        holder.slika.setImageBitmap(newSlika)
+                    }
+                }
+            }
         }
+
     }
     fun updateBiljke(biljka: List<Biljka>) {
         this.biljke = biljka

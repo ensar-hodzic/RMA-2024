@@ -13,6 +13,7 @@ import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.CoroutineScope
@@ -27,7 +28,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener, Me
     private lateinit var kuharskiListAdapter: KuharskiListAdapter
     private lateinit var botanickiListAdapter: BotanickiListAdapter
     private lateinit var pretragaListAdapter: PretragaListAdapter
-    private lateinit var biljkeList: List<Biljka>
+    private var biljkeList: List<Biljka> = listOf<Biljka>()
     private lateinit var spinner: Spinner
     private lateinit var bojeSpinner: Spinner
     private lateinit var pretragaET: EditText
@@ -40,12 +41,14 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener, Me
     private var itemClicked=false
     private lateinit var resetButton: Button
     private lateinit var novaBiljkaButton: Button
+    private lateinit var db: BiljkaDatabase
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         bottomBar=findViewById(R.id.bottomBar)
+        db = BiljkaDatabase.getInstance(this)
 
         biljkeRV = findViewById(R.id.biljkeRV)
         biljkeRV.layoutManager = LinearLayoutManager(
@@ -66,7 +69,11 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener, Me
             onItemSelectedListener = this@MainActivity
             setSelection(0, false)
         }
-        biljkeList= getBiljke()
+        lifecycleScope.launch(Dispatchers.IO) {
+            //db.biljkaDao().clearData()
+            biljkeList = db.biljkaDao().getAllBiljkas()
+
+        }
 
         bojeSpinner = findViewById(R.id.bojaSPIN)
         var boje = ArrayAdapter(this, android.R.layout.simple_spinner_item, colors)
@@ -94,13 +101,17 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener, Me
         resetButton=findViewById(R.id.resetBtn)
         resetButton.setOnClickListener {
             itemClicked=false
-            biljkeList=getBiljke()
-            when(currentMod){
-                0->medicinskiListAdapter.updateBiljke(biljkeList)
-                1->kuharskiListAdapter.updateBiljke(biljkeList)
-                2->{
-                    biljkeRV.adapter=botanickiListAdapter
-                    botanickiListAdapter.updateBiljke(biljkeList)
+            lifecycleScope.launch(Dispatchers.IO) {
+                biljkeList = db.biljkaDao().getAllBiljkas()
+                runOnUiThread {
+                    when (currentMod) {
+                        0 -> medicinskiListAdapter.updateBiljke(biljkeList)
+                        1 -> kuharskiListAdapter.updateBiljke(biljkeList)
+                        2 -> {
+                            biljkeRV.adapter = botanickiListAdapter
+                            botanickiListAdapter.updateBiljke(biljkeList)
+                        }
+                    }
                 }
             }
         }
@@ -113,11 +124,15 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener, Me
     }
 
     override fun onResume() {
-        biljkeList=getBiljke()
+        lifecycleScope.launch(Dispatchers.IO) {
+            biljkeList = db.biljkaDao().getAllBiljkas()
+            runOnUiThread {
+                biljkeRV.adapter = medicinskiListAdapter
+                medicinskiListAdapter.updateBiljke(biljkeList)
+            }
+        }
         currentMod=0
         spinner.setSelection(0)
-        biljkeRV.adapter = medicinskiListAdapter
-        medicinskiListAdapter.updateBiljke(biljkeList)
         bottomBar.visibility=View.GONE
         super.onResume()
     }
@@ -163,21 +178,21 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener, Me
     fun customList(currBiljka: Biljka){
         when(currentMod){
             0->{
-                biljkeList = getBiljke().filter { biljka ->
+                biljkeList = db.biljkaDao().getAllBiljkas().filter { biljka ->
                     biljka.medicinskeKoristi.any { medKorist ->
                         currBiljka.medicinskeKoristi.any { it.equals(medKorist) }
                     }
                 }
             }
             1->{
-                biljkeList = getBiljke().filter { biljka ->
+                biljkeList = db.biljkaDao().getAllBiljkas().filter { biljka ->
                     biljka.jela.any { jelo ->
                         currBiljka.jela.any { it.equals(jelo, ignoreCase = true) }
                     } || biljka.profilOkusa.equals(currBiljka.profilOkusa)
                 }
             }
             2->{
-                biljkeList = getBiljke().filter { biljka ->
+                biljkeList = db.biljkaDao().getAllBiljkas().filter { biljka ->
                     biljka.porodica.equals(currBiljka.porodica, ignoreCase = true) &&
                             (biljka.klimatskiTipovi.any { klimatskiTip ->
                                 currBiljka.klimatskiTipovi.any { it.equals(klimatskiTip) }

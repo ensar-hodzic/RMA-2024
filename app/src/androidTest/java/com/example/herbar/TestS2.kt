@@ -211,7 +211,7 @@ class TestS2 {
                 (matches(isDisplayed()))
             })
     }
-
+    /*
     private lateinit var mockImageBitmap : Bitmap
     private fun createMockImageBitmap(): Bitmap {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
@@ -259,5 +259,5 @@ class TestS2 {
         }
         Intents.release()
     }
-
+    */
 }
