@@ -30,7 +30,7 @@ fun tipZemljista(soil: Double): Zemljiste?{
 
 
 class TrefleDAO {
-    private val api_key= "YL7dChyJ6LGtljfkA5eagwTiIb20th_UIDsmFx0NqdM"
+    private val api_key= "INSERT KEY"
 
 
     suspend fun getImage(biljka: Biljka): Bitmap {
